@@ -4,12 +4,6 @@ import {msalConfig} from './config'
 
 export const msalClient = new PublicClientApplication(msalConfig);
 
-
-// function useSilentToken(account){
-
-// }
-
-
 /**
  * Authenticate user using MSAL OpenID library for Azure AD.
  * It uses redirect method.

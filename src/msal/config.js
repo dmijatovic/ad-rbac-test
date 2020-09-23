@@ -66,7 +66,7 @@ export const tokenRequest = {
   //"api://0bb2e832-fe23-44d2-920e-120caf021a74/all.read"
   //"api://0bb2e832-fe23-44d2-920e-120caf021a74/api.test.scope"
   scopes:[
-    "api://0bb2e832-fe23-44d2-920e-120caf021a74/api.test.scope"
+    "api://0bb2e832-fe23-44d2-920e-120caf021a74/api.random.scope"
   ]
 };
 
