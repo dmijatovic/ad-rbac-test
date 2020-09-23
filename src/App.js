@@ -5,7 +5,8 @@ import {loginPopup, acquireTokenSilent, logout} from './msal/login'
 import {callApiWithAccessToken} from './msal/api'
 import {tokenRequest, loginRequest} from './msal/config'
 
-import useLoginRedirect from './msal/useRedirect'
+import TokenSection from './components/TokenSection'
+import ApiResponse from './components/ApiResponse'
 
 function silentToken(user){
   // debugger
@@ -25,65 +26,12 @@ function getUser(accessToken){
   return callApiWithAccessToken("http://localhost:5000/user",accessToken)
 }
 
-
 function App() {
   console.log("App...enter")
   const [state, setState] = useState(null)
   const [userToken, setUserToken] = useState(null)
   // eslint-disable-next-line
   const [apiToken, setApiToken] = useState(null)
-  // eslint-disable-next-line
-  const [account, userTokenRedirect] = useLoginRedirect({
-    scopes:["openid","profile","email"]
-  })
-  // const [acc, accessTokenRedirect] = useLoginRedirect({
-  //   scopes:["api://0bb2e832-fe23-44d2-920e-120caf021a74/api.test.scope"]
-  // })
-  console.log("account:", account)
-  console.log("userTokenRedirect:", userTokenRedirect)
-
-  useEffect(()=>{
-    if (account){
-      silentToken(account)
-        .then(resp=>{
-          setApiToken(resp)
-        })
-        .catch(e=>{
-          debugger
-          console.error(e)
-        })
-    }
-  },[account])
-
-  useEffect(()=>{
-    if (userTokenRedirect){
-      const account = userTokenRedirect
-      setUserToken(userTokenRedirect)
-      silentToken(account)
-        .then(resp=>{
-          setApiToken(resp)
-        })
-        .catch(e=>{
-          debugger
-          console.error(e)
-        })
-    }
-  },[userTokenRedirect])
-  // console.log("accessTokenRedirect:", accessTokenRedirect)
-  // useEffect(()=>{
-  //   console.log("App.useEffect[userTokenRedirect]...enter")
-  //   debugger
-  //   if (userTokenRedirect){
-  //     setUserToken(userTokenRedirect)
-  //   }
-  // },[account, userTokenRedirect])
-  // useEffect(()=>{
-  //   console.log("App.useEffect[accessTokenRedirect]...enter")
-  //   debugger
-  //   if (accessTokenRedirect){
-  //     setApiToken(accessTokenRedirect)
-  //   }
-  // },[acc, accessTokenRedirect])
 
   const login=(type="popup")=>{
     console.log("Login now")
@@ -95,6 +43,19 @@ function App() {
         console.error(e)
         setUserToken(null)
       })
+    }
+  }
+
+  const getAccessToken = () =>{
+    if (userToken){
+      silentToken(userToken)
+        .then(resp=>{
+          setApiToken(resp)
+        })
+        .catch(e=>{
+          debugger
+          console.error(e)
+        })
     }
   }
 
@@ -122,45 +83,31 @@ function App() {
     }
   }
 
-  function apiTokenSection(){
-    if (apiToken){
-      return(
-        <section>
-          <h3>Acess token</h3>
-          <pre>
-            {JSON.stringify(apiToken['accessToken'],null,2)}
-          </pre>
-        </section>
-      )
-    }
-    return null
+  function buttonsSection(){
+    return (
+      <section>
+        {userToken ?
+          <button onClick={getAccessToken}>Get Access Token </button> :
+          <button onClick={()=>login()}>Login</button>
+        }
+        {
+          apiToken ?
+          <button onClick={apiRequest}>Api request</button>: null
+        }
+        {
+          userToken ? <button onClick={logout}>Logout</button> : null
+        }
+      </section>
+    )
   }
 
   return (
     <article className="App">
       <h1>App here</h1>
-      <section>
-        <button onClick={()=>login("redirect")}>Login</button>
-        {/* <button onClick={login}>Login redirect</button> */}
-        {/* {user ? <button onClick={apiRequest}>Api request</button> : ""} */}
-        <button onClick={apiRequest}>Api request</button>
-
-        <button onClick={logout}>Logout</button>
-      </section>
-      <section>
-        <h3>User profile</h3>
-        <pre>
-          {userToken ? JSON.stringify(userToken['accessToken'],null,2) :"Use login button"}
-        </pre>
-      </section>
-      {apiTokenSection()}
-      <section>
-        <h3>Api response</h3>
-        <pre>
-          {state? JSON.stringify(state,null,2) :""}
-        </pre>
-      </section>
-
+      {buttonsSection()}
+      <TokenSection title="User access token" token={userToken}/>
+      <TokenSection title="Access token API" token={apiToken} />
+      <ApiResponse title="Api response" data={state} />
     </article>
   );
 }
