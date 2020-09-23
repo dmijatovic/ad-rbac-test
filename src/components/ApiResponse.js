@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function TokenSection({title="Token section",data}){
+export default function TokenSection({title="API response",data}){
   if (data){
     return (
       <section>
@@ -11,6 +11,6 @@ export default function TokenSection({title="Token section",data}){
       </section>
     )
   }else{
-    return null
+    return <h4>Data should apear HERE</h4>
   }
 }

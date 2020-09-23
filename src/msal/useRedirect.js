@@ -15,7 +15,8 @@ export const msalClient = new PublicClientApplication(msalConfig);
 export default function useLoginRedirect(claims){
   console.log("useLoginRedirect...enter")
   const [token, setToken] = useState(null)
-  const [account, setAccount] = useState(null)
+  // const [account, setAccount] = useState(null)
+  const [error, setError] = useState(null)
 
   useEffect(()=>{
     console.log("useLoginRedirect.useEffect[]..enter")
@@ -30,26 +31,19 @@ export default function useLoginRedirect(claims){
       if (resp!==null){
         debugger
         console.log("useRedirect.handleRedirectPromise()...setToken(resp)")
-        setAccount(resp['account'])
+        // setAccount(resp['account'])
         setToken(resp)
-      } else if (account===null) {
-        //try to get account from cache/ls/cookie
+      } else if (token === null) {
+        // we do not have token yet
+        // 1. try to get account from cache/ls/cookie
         const accounts = msalClient.getAllAccounts()
         if (accounts.length === 1){
           // we have account but not id_token/login token
           // require token for claims silently based on send claims/config
-          // return msalClient.acquireTokenSilent({
-          //   ...claims,
-          //   account: accounts[0]
-          // })
-          console.log("useLoginRedirect.setAccount()")
-          // debugger
-          setAccount(accounts[0])
-          // CANNOT CALL THIS HERE ENDLESS LOOP
-          // return msalClient.acquireTokenRedirect({
-          //   ...claims,
-          //   account: account
-          // });
+          return msalClient.acquireTokenSilent({
+            ...claims,
+            account: accounts[0]
+          })
         } else if (accounts.length===0){
           //user needs to login
           console.log("useLoginRedirect.loginRedirect(claims)...START")
@@ -64,13 +58,20 @@ export default function useLoginRedirect(claims){
         }
       }
     })
+    .then(silentToken=>{
+      if (silentToken && token===null){
+        debugger
+        setToken(silentToken)
+      }
+    })
     .catch(e => {
       debugger
       console.error("useLoginRedirect...ERROR: ",e)
       setToken(null)
+      setError(e.message)
     })
-  },[claims,account])
+  },[claims,token])
 
-  return [account, token]
+  return [token, error]
 }
 
