@@ -1,0 +1,114 @@
+{
+	"id": "9f648b88-55e7-4d87-aa16-6c86a1d7f346",
+	"acceptMappedClaims": null,
+	"accessTokenAcceptedVersion": 2,
+	"addIns": [],
+	"allowPublicClient": null,
+	"appId": "0bb2e832-fe23-44d2-920e-120caf021a74",
+	"appRoles": [
+		{
+			"allowedMemberTypes": [
+				"Application"
+			],
+			"description": "Allows GET requests for admin role",
+			"displayName": "Admin read",
+			"id": "379df0b0-e5a1-4afc-827e-895d88781455",
+			"isEnabled": true,
+			"lang": null,
+			"origin": "Application",
+			"value": "all.read"
+		}
+	],
+	"oauth2AllowUrlPathMatching": false,
+	"createdDateTime": "2020-09-19T18:22:34Z",
+	"groupMembershipClaims": null,
+	"identifierUris": [
+		"api://0bb2e832-fe23-44d2-920e-120caf021a74"
+	],
+	"informationalUrls": {
+		"termsOfService": null,
+		"support": null,
+		"privacy": null,
+		"marketing": null
+	},
+	"keyCredentials": [],
+	"knownClientApplications": [],
+	"logoUrl": null,
+	"logoutUrl": "https://localhost:3000/logout",
+	"name": "WebAPI-node-test1",
+	"oauth2AllowIdTokenImplicitFlow": false,
+	"oauth2AllowImplicitFlow": false,
+	"oauth2Permissions": [
+		{
+			"adminConsentDescription": "Api test scope for admin",
+			"adminConsentDisplayName": "Api test scope",
+			"id": "d7775222-95b6-416d-8e5c-b45598fa1373",
+			"isEnabled": true,
+			"lang": null,
+			"origin": "Application",
+			"type": "User",
+			"userConsentDescription": "Api test scope for users",
+			"userConsentDisplayName": "Api test Scope users",
+			"value": "api.test.scope"
+		},
+		{
+			"adminConsentDescription": "Allows GET requests for admin role",
+			"adminConsentDisplayName": "Admin read",
+			"id": "379df0b0-e5a1-4afc-827e-895d88781455",
+			"isEnabled": true,
+			"lang": null,
+			"origin": "Application",
+			"type": "User",
+			"userConsentDescription": "Allows GET requests for users role",
+			"userConsentDisplayName": "User read",
+			"value": "all.read"
+		},
+		{
+			"adminConsentDescription": "Allows write to test 1 api for admins only",
+			"adminConsentDisplayName": "Admin write test1 api",
+			"id": "62a07934-d6ff-4407-81b2-1572e679b95e",
+			"isEnabled": true,
+			"lang": null,
+			"origin": "Application",
+			"type": "Admin",
+			"userConsentDescription": null,
+			"userConsentDisplayName": null,
+			"value": "admin.write"
+		}
+	],
+	"oauth2RequirePostResponse": false,
+	"optionalClaims": null,
+	"orgRestrictions": [],
+	"parentalControlSettings": {
+		"countriesBlockedForMinors": [],
+		"legalAgeGroupRule": "Allow"
+	},
+	"passwordCredentials": [],
+	"preAuthorizedApplications": [],
+	"publisherDomain": "dusandv4all.onmicrosoft.com",
+	"replyUrlsWithType": [
+		{
+			"url": "http://localhost:3000",
+			"type": "Spa"
+		}
+	],
+	"requiredResourceAccess": [
+		{
+			"resourceAppId": "0bb2e832-fe23-44d2-920e-120caf021a74",
+			"resourceAccess": [
+				{
+					"id": "14dad69e-099b-42c9-810b-d002981feec1",
+					"type": "Scope"
+				}
+			]
+		}
+	],
+	"samlMetadataUrl": null,
+	"signInUrl": null,
+	"signInAudience": "AzureADMultipleOrgs",
+	"tags": [
+		"notApiConsumer",
+		"webApi"
+	],
+	"tokenEncryptionKeyId": null
+}
