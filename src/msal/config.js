@@ -37,7 +37,7 @@ export const msalConfig = {
     authority: "https://login.microsoftonline.com/0f22a838-ece9-49f4-b8dc-e71e2a5d705c",
     //common end point
     // authority: "https://login.microsoftonline.com/common/v2.0/.well-known/openid-configuration",
-    // validateAuthority: true,
+    validateAuthority: true,
     redirectUri: "http://localhost:3000",
   },
   cache: {
@@ -51,7 +51,7 @@ export const msalConfig = {
  * visit https://azuread.github.io/microsoft-authentication-library-for-js/docs/msal/modules/_authenticationparameters_.html
  */
 export const loginRequest = {
-  scopes: ["openid"],
+  scopes: ["openid","roles"],
 };
 
 // Add here scopes for access token to be used at the API endpoints.

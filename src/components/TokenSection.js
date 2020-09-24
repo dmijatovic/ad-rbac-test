@@ -6,6 +6,11 @@ export default function TokenSection({title="Token section",token}){
     return (
       <section>
         <h3>{title}</h3>
+        <h5>idToken</h5>
+        <pre>
+          {token['idToken']}
+        </pre>
+        <h5>accessToken</h5>
         <pre>
           {token['accessToken']}
         </pre>
