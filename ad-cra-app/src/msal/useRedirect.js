@@ -15,7 +15,8 @@ export const msalClient = new PublicClientApplication(msalConfig);
 export default function useLoginRedirect(claims){
   console.log("useLoginRedirect...enter")
   const [token, setToken] = useState(null)
-  const [account, setAccount] = useState(null)
+  // const [account, setAccount] = useState(null)
+  const [error, setError] = useState(null)
 
   useEffect(()=>{
     console.log("useLoginRedirect.useEffect[]..enter")
@@ -28,49 +29,53 @@ export default function useLoginRedirect(claims){
       console.log("useLoginRedirect.handleRedirectPromise()...resp:", resp)
       // no redirect response
       if (resp!==null){
-        debugger
-        console.log("useRedirect.handleRedirectPromise()...setToken(resp)")
-        setAccount(resp['account'])
+        // debugger
+        console.log("useRedirect.setToken(resp)...START")
+        // setAccount(resp['account'])
         setToken(resp)
-      } else if (account===null) {
-        //try to get account from cache/ls/cookie
+        console.info("useRedirect.setToken(resp)...DONE")
+      } else if (token === null && error===null) {
+        // we do not have token yet
+        // 1. try to get account from cache/ls/cookie
         const accounts = msalClient.getAllAccounts()
         if (accounts.length === 1){
+          console.log("useLoginRedirect.acquireTokenSilent(claims,account)...CALL")
           // we have account but not id_token/login token
           // require token for claims silently based on send claims/config
-          // return msalClient.acquireTokenSilent({
-          //   ...claims,
-          //   account: accounts[0]
-          // })
-          console.log("useLoginRedirect.setAccount()")
-          // debugger
-          setAccount(accounts[0])
-          // CANNOT CALL THIS HERE ENDLESS LOOP
-          // return msalClient.acquireTokenRedirect({
-          //   ...claims,
-          //   account: account
-          // });
+          return msalClient.acquireTokenSilent({
+            ...claims,
+            account: accounts[0]
+          })
         } else if (accounts.length===0){
           //user needs to login
-          console.log("useLoginRedirect.loginRedirect(claims)...START")
+          console.log("useLoginRedirect.loginRedirect(claims)...CALL")
           //this promise never returns here
           //it returns to handleRedirectPromise = parent
           //user is not logged in and we have no account info
           //stored locally in MSAL. Start login redirect process
-          debugger
+          // debugger
           msalClient.loginRedirect({
             ...claims
           })
         }
       }
     })
+    .then(silentToken=>{
+      if (silentToken && token===null){
+        // debugger
+        console.log("useLoginRedirect.setToken(silentToken)...START")
+        setToken(silentToken)
+        console.info("useLoginRedirect.setToken(silentToken)...DONE")
+      }
+    })
     .catch(e => {
       debugger
       console.error("useLoginRedirect...ERROR: ",e)
       setToken(null)
+      setError(e.message)
     })
-  },[claims,account])
+  },[claims,token,error])
 
-  return [account, token]
+  return [token, error]
 }
 

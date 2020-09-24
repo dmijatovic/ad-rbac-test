@@ -37,7 +37,7 @@ export const msalConfig = {
     authority: "https://login.microsoftonline.com/0f22a838-ece9-49f4-b8dc-e71e2a5d705c",
     //common end point
     // authority: "https://login.microsoftonline.com/common/v2.0/.well-known/openid-configuration",
-    // validateAuthority: true,
+    validateAuthority: true,
     redirectUri: "http://localhost:3000",
   },
   cache: {
@@ -57,7 +57,8 @@ export const loginRequest = {
 // Add here scopes for access token to be used at the API endpoints.
 // The scopes to use need to be defined in
 // Azure AD->App Registrations->Expose an API
-// and maybe also in API permissions
+// If the scope is not defined token request will error with the message
+// about missing scope
 export const tokenRequest = {
   //add account info here after login
   account: undefined,
@@ -66,7 +67,7 @@ export const tokenRequest = {
   //"api://0bb2e832-fe23-44d2-920e-120caf021a74/all.read"
   //"api://0bb2e832-fe23-44d2-920e-120caf021a74/api.test.scope"
   scopes:[
-    "api://0bb2e832-fe23-44d2-920e-120caf021a74/api.random.scope"
+    "api://0bb2e832-fe23-44d2-920e-120caf021a74/api.test.scope"
   ]
 };
 

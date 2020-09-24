@@ -61,16 +61,4 @@ export function logout() {
  */
 export function acquireTokenSilent(tokenRequest){
   return msalClient.acquireTokenSilent(tokenRequest)
-    .catch(error => {
-      console.log("Silent token acquisition fails. Acquiring token using popup");
-      console.log(error);
-      // fallback to interaction when silent call fails
-      // return msalClient.acquireTokenPopup(tokenRequest)
-      //   .then(tokenResponse => {
-      //     console.log("access_token acquired at: " + new Date().toString());
-      //     return tokenResponse;
-      //   }).catch(error => {
-      //     console.log(error);
-      //   });
-    });
 }

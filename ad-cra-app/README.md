@@ -1,13 +1,10 @@
-# Azure AD OpenID and RBAC test with MSAL
+# Azure AD MSAL example
 
-This project is used to test MSAL authentication and authorization using OpenID and RBAC access controll for specific api routes. The repo consist of 2 projects:
-
-- `ad-cra-app`: React front-end app created using CRA.
-- `ad-node-api`: NodeJS api using express and passport.js for OpenID authentication and authorization.
+This project is used to test MSAL authentication and authorization. All msal code is in msal folder. For redirect there is useRedirectLogin hook. The redirect and pop solutions are in different branches. My prefference is to use redirect solution.
 
 ## MSAL basics
 
-The msal code is in msal folder of frontend app (ad-cra-app). For redirect login I created `useRedirectLogin` hook. Redirect and popup login solutions are in different branches. My prefference is to use redirect solution.
+Here we describe what we have learned from this example.
 
 ### Initalization
 
@@ -25,7 +22,7 @@ const msalConfig = {
 
 ### Scopes
 
-The scopes used in config of the frontend app need to be defined in Azure AD. On the api side (with passport) these scopes only need to be defined in config and should only use short name (not the url/id).
+The scopes used in config need to be defined in Azure AD. On the api side with passport these scopes only need to be defined in config (and only use short name).
 
 When performing token request using silentToken method, the account information is required. The account information is part of login process. In the login request some basic scopes can be asked like openid, profile, email etc. Even without these scopes some basic scopes are returned.
 
@@ -52,9 +49,11 @@ If the user exists in the tenant it will be allowed access to application. To li
 
 Azure AD -> Enterprise applications -> AppName -> Properties 'User Assignment required' = Yes!
 
+For assigning the roles premium P2 version is required, as far as I can find.
+
 ### Roles
 
-Creating and assigning user roles seem to me somewhat complicated. I first though I would need premium license P2 for this. Below is the approach how I managed to have roles in the token without P2 license. I also defined MS Graph -> User.Read.All in api scopes (I don't know if this has impact on showing user roles in the token).
+Creating and assigning user roles seem to be somewhat hidden and complicated. I first though I would need premium license P2 for this. Below is the approach without P2 license. At the point I managed to have roles in the token I also had in api scopes MS Graph -> User.Read.All
 
 - `Step 1`: edit manifest file of your app at the section appRoles. In this section add following values. Go to App registrations -> [AppName] -> Manifest. It is a json file. The values received in the token under roles array are defined in prop `value`.
 
@@ -70,7 +69,7 @@ Creating and assigning user roles seem to me somewhat complicated. I first thoug
     "isEnabled": true,
     "lang": null,
     "origin": "Application",
-    "value": "analyst"
+    "value": "Analyst"
   },
       {
     "allowedMemberTypes": [
@@ -94,14 +93,14 @@ Creating and assigning user roles seem to me somewhat complicated. I first thoug
     "isEnabled": true,
     "lang": null,
     "origin": "Application",
-    "value": "redacteur"
+    "value": "testapi.redacteur"
   }
 ]
 ```
 
 - `Step 2`: assign these roles to users added to app. Go to Enterprise Apps ->[AppName]-> Users and groups. Click on add. This seem like you are adding a user but you are actually adding a combination of user and role. Therefore you will have multiple items here for one user if it has multiple roles assigned.
 
-<img src="./ad-cra-app/notes/AssingRoleToAppUser.png" />
+<img src="./notes/AssingRoleToAppUser.png" />
 
 ### Optional claims
 

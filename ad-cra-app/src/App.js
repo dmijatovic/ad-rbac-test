@@ -33,17 +33,15 @@ function App() {
   // eslint-disable-next-line
   const [apiToken, setApiToken] = useState(null)
 
-  const login=(type="popup")=>{
+  function login(){
     console.log("Login now")
-    if (type==="popup"){
-      loginPopup(loginRequest).then(resp=>{
-        // console.log("Response received...", resp)
-        setUserToken(resp)
-      }).catch(e=>{
-        console.error(e)
-        setUserToken(null)
-      })
-    }
+    loginPopup(loginRequest).then(resp=>{
+      // console.log("Response received...", resp)
+      setUserToken(resp)
+    }).catch(e=>{
+      console.error(e)
+      setUserToken(null)
+    })
   }
 
   const getAccessToken = () =>{
