@@ -179,7 +179,7 @@ On [this page](https://docs.microsoft.com/en-us/azure/active-directory/develop/r
 
 On [this page](https://docs.microsoft.com/en-us/azure/active-directory/users-groups-roles/roles-custom-overview) the basic term are explained.
 
-For configuring custom roles at least Azure AD Premium P1 license is required (5e/user).
+On MS site it is stated that configuring custom roles Azure AD Premium P1 license is required (5e/user). But I have manged to add custom roles at the app level. [See read me file]("../README.md") at the root of the project.
 
 ### Security principal
 
