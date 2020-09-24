@@ -1,24 +1,15 @@
 // eslint-disable-next-line
 import React,{useState,useEffect} from 'react';
 
-import {acquireTokenSilent, logout} from './msal/login'
+// import {acquireTokenSilent, logout} from './msal/login'
 import {callApiWithAccessToken} from './msal/api'
-import {tokenRequest} from './msal/config'
+// import {tokenRequest} from './msal/config'
 
-import useLoginRedirect from './msal/useRedirect'
+// eslint-disable-next-line
+import useLoginRedirect,{logout} from './msal/loginRedirect'
 import TokenSection from './components/TokenSection'
 import ApiResponse from './components/ApiResponse'
 import ErrorMessage from './components/ErrorMessage'
-
-function silentToken(user){
-  // debugger
-  if (user['account']){
-    tokenRequest.account = user.account
-  }else {
-    tokenRequest.account = user
-  }
-  return acquireTokenSilent(tokenRequest)
-}
 
 function getData(accessToken){
   return callApiWithAccessToken("http://localhost:5000/data",accessToken)
@@ -30,51 +21,29 @@ function getUser(accessToken){
 }
 
 function App() {
-  console.log("App...enter")
   const [state, setState] = useState(null)
-  const [userToken, setUserToken] = useState(null)
   // eslint-disable-next-line
-  const [{apiToken, apiError}, setApiToken] = useState({
-    apiToken: null,
-    apiError: null
+  const [redirectTokens, redirectError] = useLoginRedirect({
+    scopes:[
+      "openid","profile","email",
+      "api://0bb2e832-fe23-44d2-920e-120caf021a74/api.test.scope"
+    ]
   })
-  // eslint-disable-next-line
-  const [userTokenRedirect, redirectError] = useLoginRedirect({
-    scopes:["openid","profile","email"]
-  })
+  
+  console.log("App...enter...redirectTokens:", redirectTokens)
 
-  useEffect(()=>{
-    if (userTokenRedirect){
-      // const account = userTokenRedirect
-      setUserToken(userTokenRedirect)
-      silentToken(userTokenRedirect)
-        .then(resp=>{
-          setApiToken({
-            apiToken: resp,
-            apiError: null
-          })
-        })
-        .catch(e=>{
-          debugger
-          console.error(e)
-          setApiToken({
-            apiToken: null,
-            apiError: e.message
-          })
-        })
-    }
-  },[userTokenRedirect])
-
-  const getAnalystRoute=()=>{
-    getData(apiToken.accessToken).then(resp=>{
+  function getAnalystRoute(){
+    const {accessToken} = redirectTokens
+    getData(accessToken).then(resp=>{
       setState(resp)
     }).catch(e=>{
       console.error("getUser...ERROR: ", e)
     })
   }
 
-  const getAdminRoute=()=>{
-    getUser(apiToken.accessToken).then(resp=>{
+  function getAdminRoute(){
+    const {accessToken} = redirectTokens
+    getUser(accessToken).then(resp=>{
       setState(resp)
     }).catch(e=>{
       console.error("getUser...ERROR: ", e)
@@ -82,11 +51,13 @@ function App() {
   }
 
   function buttonSection(){
+    if (redirectTokens===null) return null
+    const {accessToken=null, idToken=null} = redirectTokens
     return (
       <section>
-        {apiToken ? <button onClick={getAnalystRoute}>Api request analyst</button> : null }
-        {apiToken ? <button onClick={getAdminRoute}>Api request admin</button> : null }
-        {userToken ? <button onClick={logout}>Logout</button>: null }
+        {accessToken ? <button onClick={getAnalystRoute}>Api request analyst</button> : null }
+        {accessToken ? <button onClick={getAdminRoute}>Api request admin</button> : null }
+        {idToken ? <button onClick={logout}>Logout</button>: null }
       </section>
     )
   }
@@ -102,14 +73,14 @@ function App() {
       return(
         <>
           {buttonSection()}
-          <TokenSection title="User token" token={userToken} />
-          {apiError ?
+          <TokenSection title="User tokens" token={redirectTokens} />
+          {/* {apiError ?
             <div>
               <h4>Failed to aquire API access token</h4>
               {apiError}
             </div>:
             <TokenSection title="API access token" token={apiToken} />
-          }
+          } */}
           <ApiResponse title="API response" data={state} />
         </>
       )

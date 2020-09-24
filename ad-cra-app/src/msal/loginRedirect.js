@@ -4,6 +4,47 @@ import {msalConfig} from './config'
 
 export const msalClient = new PublicClientApplication(msalConfig);
 
+// Sign-out the user
+export function logout() {
+  // Removes all sessions, need to call AAD endpoint to do full logout
+  msalClient.logout();
+}
+
+/**
+ *
+ * @param {Object} claims {
+ *  account: msal account object,
+ *  scopes: ["openid","profile","other-scopes-to-include"]
+ * }
+ * @returns [token,error]
+ */
+export function useTokenSilent({account,scopes}){
+  const [{token,error},setState] = useState({
+    token:null,
+    error:null
+  })
+  useEffect(()=>{
+    msalClient.acquireTokenSilent({
+      account,
+      scopes
+    })
+      .then(resp=>{
+        setState({
+          token: resp,
+          error: null
+        })
+      })
+      .catch(e=>{
+        setState({
+          token:null,
+          error: e.message
+        })
+      })
+  },[account,scopes])
+
+  return [token, error]
+}
+
 /**
  * Authenticate user using MSAL OpenID library for Azure AD.
  * It uses redirect method.

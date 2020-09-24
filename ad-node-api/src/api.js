@@ -26,8 +26,12 @@ app.get("/user",
   (req, res) => {
     // Service relies on the name claim.
     res.status(200).json({
-      user: req.user,
-      authInfo: req.authInfo
+      status:"200",
+      statusText:"OK",
+      payload:{
+        user: req.user,
+        authInfo: req.authInfo
+      }
     });
   }
 );
@@ -41,8 +45,12 @@ app.get("/data",
   // user passed authentication & authorisation
   (req, res) => {
     res.status(200).json({
-      user: req.user,
-      authInfo: req.authInfo
+      status:"200",
+      statusText:"OK",
+      payload:{
+        user: req.user,
+        authInfo: req.authInfo
+      }
     });
   }
 );

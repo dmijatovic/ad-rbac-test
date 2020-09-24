@@ -10,11 +10,15 @@ export default function TokenSection({title="Token section",token}){
         <pre>
           {token['idToken']}
         </pre>
+        <br/>
+        <b>roles:</b> { token['idTokenClaims']['roles'].toString() }
+        <br/>
+        <b>audience:</b> { token['idTokenClaims']['aud'].toString() }
         <h5>accessToken</h5>
         <pre>
           {token['accessToken']}
         </pre>
-        <b>From cache:</b>{ token['fromCache'].toString() }
+        <b>from cache:</b>{ token['fromCache'].toString() }
         <br/>
         <b>scopes:</b> { token['scopes'].toString() }
       </section>
