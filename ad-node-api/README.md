@@ -195,3 +195,17 @@ Custom roles created and managed by your organization.
 ### Scope
 
 A scope is the restriction of permitted actions to a particular Azure AD resource as part of a role assignment. When you assign a role, you can specify a scope that limits the administrator's access to a specific resource. For example, if you want to grant a developer a custom role, but only to manage a specific application registration, you can include the specific application registration as a scope in the role assignment.
+
+## Docker image
+
+```bash
+# build docker image
+docker build . -t dv4all/ad-publistat-api:0.0.2
+
+# run docker image
+docker run -p 5000:5007 -d dv4all/ad-publistat-api:0.0.2
+
+# push image to DockerHub
+docker push dv4all/ad-publistat-api:0.0.2
+
+```

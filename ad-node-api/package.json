@@ -1,11 +1,12 @@
 {
   "name": "ad-node-api",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "",
   "main": "api.js",
   "scripts": {
     "start": "node src/api.js",
     "dev": "nodemon src/api.js",
+    "build": "ncc build src/api.js -o dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -18,6 +19,7 @@
     "passport-azure-ad": "^4.3.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.4"
+    "nodemon": "^2.0.4",
+    "@vercel/ncc": "^0.24.1"
   }
 }
