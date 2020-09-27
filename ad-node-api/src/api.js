@@ -31,6 +31,19 @@ api.use((req, res, next) => {
 defineProtectedRoutes(api)
 definePublicRoutes(api)
 
+
+// -----------------------------
+// listen to container/process stop
+process.on("SIGINT",()=>{
+  // db.end()
+  logInfo("Closing server on SIGINT")
+  process.exit(0)
+})
+process.on("SIGTERM",()=>{
+  // db.end()
+  logInfo("Closing server on SIGTERM")
+  process.exit(0)
+})
 //---------------------------------
 // Start api server
 api.listen(port, () => {
