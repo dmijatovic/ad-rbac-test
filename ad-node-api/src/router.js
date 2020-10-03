@@ -7,6 +7,9 @@ const info = require("./handler/info")
 const data = require("./handler/data")
 const user = require("./handler/user")
 const logger = require("./handler/logger")
+const {getClients} = require("./handler/clients")
+const {getClient} = require("./handler/client")
+const {getArticles} = require("./handler/articles")
 /**
  * Define protected routes. The routes are protected by
  * passport Azure AD and by rbac user role. To authenticate
@@ -48,6 +51,36 @@ function defineProtectedRoutes(api){
     rbac(["admin"]),
     // handle request
     logger
+  );
+  // Protected API endpoint
+  api.get("/clients",
+    // passport validates token on audience and scope
+    passport.authenticate('oauth-bearer', {session: false}),
+    // rbac validates user roles
+    // pass array of allowed roles for this route
+    rbac(["analyst","admin"]),
+    // handle request
+    getClients
+  );
+  // Protected API endpoint
+  api.get("/client/:cid",
+    // passport validates token on audience and scope
+    passport.authenticate('oauth-bearer', {session: false}),
+    // rbac validates user roles
+    // pass array of allowed roles for this route
+    rbac(["analyst","admin"]),
+    // handle request
+    getClient
+  );
+  // Protected API endpoint
+  api.get("/client/:cid/articles",
+    // passport validates token on audience and scope
+    passport.authenticate('oauth-bearer', {session: false}),
+    // rbac validates user roles
+    // pass array of allowed roles for this route
+    rbac(["analyst","admin"]),
+    // handle request
+    getArticles
   );
 }
 /**
