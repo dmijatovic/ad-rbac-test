@@ -1,43 +1,5 @@
-const payload={
-  "client":{
-    "cid": "234234",
-    "name": "Most important client",
-    "items":{
-      "todo":13,
-      "completed":234
-    }
-  },
-  "articles":{
-    "page":0,
-    "rowsPerPage":50,
-    "count":3,
-    "items":[{
-      "aid":"12345",
-      "title":"First article title",
-      "summary":"Simple summary",
-      "date":"2020-09-29",
-      "medium":"Telegraph.nl",
-      "notes":"This is short comment on this"
-    },{
-      "cid":"234234",
-      "aid":"12346",
-      "title":"Second article title",
-      "summary":"Simple summary",
-      "date":"2020-09-29",
-      "medium":"De Telegraph",
-      "notes":"This is short comment on this"
-    },{
-      "cid":"234234",
-      "aid":"12347",
-      "title":"Thirdt article title",
-      "summary":"Simple summary",
-      "date":"2020-09-29",
-      "medium":"NU.nl",
-      "notes":"This is short comment on this"
-    }]
-  }
-}
 
+const {getPayload} = require("../db/articles")
 
 function getArticles(req,res){
   //extract client id
@@ -46,9 +8,11 @@ function getArticles(req,res){
   const {p,r} = req.query
 
   //return dummy with received info
-  payload.client.cid = cid
-  payload.articles.page = parseInt(p)
-  payload.articles.rowsPerPage = parseInt(r)
+  // payload.client.cid = cid
+  // payload.articles.page = parseInt(p)
+  // payload.articles.rowsPerPage = parseInt(r)
+  // payload.articles.count = payload.articles.items.length
+  const payload = getPayload(parseInt(p),parseInt(r))
 
   res.status(200).json({
     status:"200",
