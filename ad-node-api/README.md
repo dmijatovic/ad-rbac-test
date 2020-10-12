@@ -200,12 +200,12 @@ A scope is the restriction of permitted actions to a particular Azure AD resourc
 
 ```bash
 # build docker image
-docker build . -t dv4all/ad-publistat-api:0.0.3
+docker build . -t dv4all/ad-publistat-api:0.0.4
 
 # run docker image
 docker run -p 5000:5007 -d dv4all/ad-publistat-api:0.0.3
 
 # push image to DockerHub
-docker push dv4all/ad-publistat-api:0.0.3
+docker push dv4all/ad-publistat-api:0.0.4
 
 ```
