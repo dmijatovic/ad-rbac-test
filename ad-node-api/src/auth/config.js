@@ -4,7 +4,7 @@
 // Regitestred API in Azure AD need to have these
 // defined in App Registrations->Expose an API
 const scopes=[
-  "api.test.scope"
+  "api.analysis.tool"
 ]
 
 // We pass these options in to the BearerStrategy.
